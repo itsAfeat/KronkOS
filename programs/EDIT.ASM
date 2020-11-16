@@ -5,29 +5,14 @@ jmp start
 
     %include "kronkdev.inc"
 
-    clear_buffer:
-    mov dl, 0
-    mov si, file_name
-
-    ; Clear the file_name buffer for use
-    clear_loop:
-        mov byte [si], 0
-
-        inc si
-        inc dl
-
-        cmp dl, 12
-        jne clear_loop
-
-        mov si, file_name
-        mov bl, 0 ; Used for checking the length of the buffer
-
-        ret
-
 start:
     mov bh, 0x9F
-    call clearscreen
-    call clear_buffer
+    call cls
+
+    mov ax, file_name
+    call string_length
+    mov di, file_name
+    call string_clear
 
 	mov ch, 0x06
     call change_cursor
@@ -41,7 +26,7 @@ start:
     call string_truncate
 
     mov bh, 0x9F
-    call clearscreen
+    call cls
 
     mov ax, new_color_list
     mov bx, color_help1
@@ -607,7 +592,7 @@ start:
         call change_cursor
 
         mov bh, 0x9F
-        call clearscreen
+        call cls
         ret
 
 ; ------------------------------------------------------------------
@@ -654,13 +639,13 @@ setup_screen:
         jmp .continue
 
     .continue:
-    call clearscreen
+    call cls
 
     mov si, title_msg
-    call print_string
+    call print
 
     mov si, file_name
-    call print_string
+    call print
 
     mov dh, 1
     mov dl, 0
@@ -674,7 +659,7 @@ setup_screen:
     call print_horiz_line
 
     mov si, footer_msg
-    call print_string
+    call print
 
     popa
     ret

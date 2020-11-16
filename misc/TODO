@@ -1,6 +1,6 @@
 Bootloader:
     ✔ Create basic bootloader with FAT12 filesystem @done(20-04-23 21:01) @high
-    ☐ Look into adding more space than 1.44 MB @low 
+    ✘ Look into adding more space than 1.44 MB @low @cancelled(20-11-16 12:21)
 
 Kernel:
     ✔ Create the foundation of the kernel (input and basic commands) @high @done(20-11-09 18:26)
@@ -14,6 +14,7 @@ Kernel:
     ☐ Add the ability to run mk, rm, load and edit from the help menu @high 
     ✔ Make a fancy DIR output (like the one in 0.2.5) @done(20-11-15 15:07)
     ☐ Create a basic user interface for the video mode @high 
+    ✔ Add kronkdev.inc and add the EDIT program @done(20-11-16 12:20)
 
 Settings:
     ✔ Add a settings menu @high @done(20-08-21 13:26)

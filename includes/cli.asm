@@ -60,6 +60,11 @@ kronk_cli:
     mov ax, help_com
     call check_com
     jnc .show_help
+    
+    ; ----------------------------------
+    ; MK AND RM
+
+    pusha
 
     mov si, in_buffer+3
     mov di, .tmp_filename
@@ -84,6 +89,35 @@ kronk_cli:
     mov si, .tmp_inbuffer
     mov di, in_buffer
     call string_copy
+
+    popa
+
+    ; ----------------------------------
+    ; LOAD AND EDIT
+
+    pusha
+
+    mov si, in_buffer+5
+    mov di, .tmp_filename
+    call string_copy
+
+    mov si, in_buffer
+    mov di, .tmp_inbuffer
+    call string_copy
+
+    mov si, in_buffer
+    mov ax, 4
+    call string_truncate
+
+    mov ax, load_com
+    call check_com
+    jnc .load_file
+
+    mov si, .tmp_inbuffer
+    mov di, in_buffer
+    call string_copy
+
+    popa
 
     mov ax, restart_com
     call check_com
@@ -119,14 +153,23 @@ kronk_cli:
 
     jmp .input_loop
 
+; ----------------------------------
+; SETTINGS
+
 .settings:
     call show_settings
     jmp .input_loop
+
+; ----------------------------------
+; CLEAR
 
 .clear:
     mov bh, cli_color
     call cls
     jmp .input_loop
+
+; ----------------------------------
+; DIR
 
 .dir:
     xor ax, ax
@@ -241,6 +284,8 @@ kronk_cli:
 
     jmp .input_loop
 
+; ----------------------------------
+; HELP
 
 .show_help:
     mov ax, .help_commands
@@ -277,6 +322,8 @@ kronk_cli:
     .help_header:       db "HELP MENU", 0
     .help_string:       db "Press ENTER to run any of the commands", 0
 
+; ----------------------------------
+; MAKE FILE
 
 .make_file:
     pusha
@@ -303,6 +350,8 @@ kronk_cli:
 
     jmp .input_loop
 
+; ----------------------------------
+; REMOVE FILE
 
 .remove_file:
     pusha
@@ -329,6 +378,35 @@ kronk_cli:
 
     jmp .input_loop
 
+; ----------------------------------
+; LOAD FILE
+
+.load_file:
+    pusha
+    xor ax, ax
+
+    mov ax, .tmp_filename
+    call try_run_file
+    jc .not_found
+
+    popa
+    jmp .input_loop
+
+    .not_found:
+        mov si, notfound_msg
+        call print
+
+        popa
+        jmp .input_loop
+
+; ----------------------------------
+; EDIT FILE
+
+.edit_file:
+    jmp .input_loop
+
+; ----------------------------------
+; RESTART
 
 .restart:
     mov ax, 0x00
@@ -338,6 +416,8 @@ kronk_cli:
     ; Halt cpu if restart fails
     hlt
 
+; ----------------------------------
+; SHUTDOWN
 
 .shutdown:
     xor ax, ax

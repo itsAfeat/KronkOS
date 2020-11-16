@@ -8,10 +8,34 @@
     ORG 0x0000
     BITS 16
 
+JUMP_VECTORS:
+    jmp kernel_start
+    jmp print
+    jmp cls
+    jmp os_file_exists
+    jmp os_load_file
+    jmp os_create_file
+    jmp os_remove_file
+    jmp os_write_file
+    jmp string_lowercase
+    jmp string_uppercase
+    jmp string_truncate
+    jmp string_length
+    jmp move_cursor
+    jmp get_cursor_pos
+    jmp print_horiz_line
+    jmp input_dialog
+    jmp list_dialog
+    jmp dialog_box
+    jmp change_cursor
+    jmp string_clear
+
+
     %define KRONKOS_VER '0.3.2'
     %define KRONKOS_API 4
-
-    jmp kernel_start
+    
+    ; RAM location for kernel disk operations
+    disk_buffer     equ 24576
 
     ; Screen mouse clamps
     screenmaxW      equ 0x004E
@@ -26,9 +50,6 @@
     ; Screen modes
     vidRes          equ 0x13
     cliRes          equ 0x03
-    
-    ; RAM location for kernel disk operations
-    disk_buffer     equ 24576
 
 ; ******************************************************************
 ; Start the kernel
@@ -72,7 +93,7 @@ RESET:
 
     ; Save the settings
     mov ax, settings_filename
-    mov bx, 32768
+    mov bx, 36864
     mov cx, usrNam
     call os_write_file
 
@@ -81,7 +102,7 @@ RESET:
 .skip_setup:
     ; Load the settings file
     mov ax, settings_filename
-    mov cx, 32768
+    mov cx, 36864
     xor bx, bx
     call os_load_file
 
@@ -102,6 +123,141 @@ RESET:
 .startVideo:
     call kronk_vid
     jmp $
+
+
+; ------------------------------------------------------------------
+; KERNEL SUBROUTINES
+    error_ext:
+        pop si
+
+        mov ax, err1_ext
+        mov bx, err2_ext
+        xor cx, cx
+        xor dx, dx
+        call dialog_box
+
+        mov bh, 0x9F
+        call cls
+
+        ret
+
+    execute_bas_program:
+        pop si
+        push si
+        
+        mov bx, si
+        mov ax, si
+        call string_length
+
+        mov si, bx
+        add si, ax
+
+        sub si, 3
+
+        mov di, bas_ext
+        mov cx, 3
+        rep cmpsb
+        jne error_ext
+
+        pop si
+        
+        mov ax, si
+        mov cx, 32768
+        call os_load_file
+
+        mov bh, 0x0F
+        call cls
+
+        mov ax, 32768
+        xor si, si
+        ;call os_run_basic
+
+        mov si, new_line
+        call print
+
+        mov bh, 0x9F
+        call cls
+
+        ret
+
+    execute_bin_program:
+        mov si, new_line
+        call print
+
+		xor ax, ax
+		xor bx, bx
+		xor cx, cx
+		xor dx, dx
+		xor si, si
+		xor di, di
+
+        call 32768
+        mov bh, 0x0F
+        call cls
+
+        mov si, prg_done_msg
+        call print
+        xor ah, ah
+        int 0x16
+        
+        mov bh, 0x0F
+        call cls
+
+        ret
+
+    try_run_file:
+        call string_uppercase
+        mov si, ax
+        mov di, kern_filename
+        call string_compare
+        jc load_kern_err
+
+        call os_file_exists
+        jc .not_found
+        clc
+
+        mov si, ax
+        push si 
+
+        mov bx, si
+        mov ax, si
+        call string_length
+
+        mov si, bx
+        add si, ax
+
+        sub si, 3
+
+        mov di, bin_ext
+        mov cx, 3
+        rep cmpsb
+        jne execute_bas_program
+        pop si
+
+        mov ax, si
+        mov cx, 32768
+        call os_load_file
+
+        call execute_bin_program
+        ret
+
+        .not_found:
+            stc
+            ret
+
+        load_kern_err:
+            pop si
+
+            mov ax, err3_ext
+            mov bx, err4_ext
+            xor cx, cx
+            xor dx, dx
+            call dialog_box
+
+            mov bh, 0x9F
+            call cls
+
+            ret
 
 ; ------------------------------------------------------------------
 ; STRINGS AND OTHER VARIABLES
@@ -160,6 +316,7 @@ RESET:
     ; FILE RELATED VARIABLES START
 	kern_filename:		db 'KERNEL.BIN', 0
     settings_filename:  db 'SETTINGS.KSF', 0
+	prg_done_msg:	    db '>>> Program finished --- press a key to continue...', 0
 
 	bin_ext:			db 'BKF'
 	bas_ext:			db 'BAS'
@@ -168,6 +325,7 @@ RESET:
 	err3_ext:			db "Error loading file", 0
 	err4_ext:			db "You can't load KERNEL.BIN", 0
     err5_ext:           db "You can't load SETTINGS.KSF", 0
+    notfound_msg:	    db 0x0a, 0x0d, "File not found", 0x0a, 0x0a, 0x0d, 0
     ; END
 
     ; OTHER VARIABLES START

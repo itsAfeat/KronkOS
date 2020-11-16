@@ -21,19 +21,15 @@ echo Done!
 ::del kernel.o
 ::echo Done!
 
-::echo.
-::echo Assembling programs...
-::echo ======================================================
-::cd programs
-::    for %%i in (*.BKF) do del %%i
-::    for %%i in (*.ASM) do wsl nasm -O0 -f BIN %%i
-::    for %%i in (*.) do ren %%i %%i.BKF
-::cd ..
-::echo Done!
-
-cd images
-del KronkOS.img
-cd..
+echo.
+echo Assembling programs...
+echo ======================================================
+cd programs
+    for %%i in (*.BKF) do del %%i
+    for %%i in (*.ASM) do wsl nasm -O0 -f BIN %%i
+    for %%i in (*.) do ren %%i %%i.BKF
+cd ..
+echo Done!
 
 echo.
 echo Adding bootsector to disk image...
