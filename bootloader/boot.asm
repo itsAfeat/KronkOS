@@ -52,7 +52,6 @@ bootloader_start:
     mov   ax, 0x07C0                    ; Set data segment to where we're loaded
     mov   ds, ax
     
-skip_enable_a20:
     ; NOTE: A few early BIOSes are reported to improperly set DL
 
     cmp   dl, 0
@@ -129,7 +128,7 @@ next_root_entry:
     xchg  dx, cx                        ; Get the original CX back
     loop next_root_entry
 
-    mov   si, file_not_found            ; If kernel is not found, ficken der judentum im Europa
+    mov   si, file_not_found            ; If kernel is not found, aurotten der juden im Europa
     call  print_string
     jmp   reboot
 

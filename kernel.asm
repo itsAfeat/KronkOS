@@ -7,35 +7,14 @@
 
     ORG 0x0000
     BITS 16
-
-JUMP_VECTORS:
-    jmp kernel_start
-    jmp print
-    jmp cls
-    jmp os_file_exists
-    jmp os_load_file
-    jmp os_create_file
-    jmp os_remove_file
-    jmp os_write_file
-    jmp string_lowercase
-    jmp string_uppercase
-    jmp string_truncate
-    jmp string_length
-    jmp move_cursor
-    jmp get_cursor_pos
-    jmp print_horiz_line
-    jmp input_dialog
-    jmp list_dialog
-    jmp dialog_box
-    jmp change_cursor
-    jmp string_clear
-
-
+    
     %define KRONKOS_VER '0.3.2'
     %define KRONKOS_API 4
     
-    ; RAM location for kernel disk operations
+    ; RAM locations
     disk_buffer     equ 24576
+    prg_load_loc    equ 32768
+    set_load_loc    equ 36864
 
     ; Screen mouse clamps
     screenmaxW      equ 0x004E
@@ -70,8 +49,11 @@ kernel_start:
     cld                         ; Clear Direction Flag (DF=0 is for forward string movement)
 ; ******************************************************************
 
-; ------------------------------------------------------------------
-; KERNEL CODE START
+
+; ==================================================================
+; START OF KERNEL
+; ==================================================================
+
 RESET:
 	xor ax, ax
 	xor bx, bx
@@ -93,7 +75,7 @@ RESET:
 
     ; Save the settings
     mov ax, settings_filename
-    mov bx, 36864
+    mov bx, set_load_loc
     mov cx, usrNam
     call os_write_file
 
@@ -102,7 +84,7 @@ RESET:
 .skip_setup:
     ; Load the settings file
     mov ax, settings_filename
-    mov cx, 36864
+    mov cx, set_load_loc
     xor bx, bx
     call os_load_file
 
@@ -118,15 +100,47 @@ RESET:
 
 .startCli:
     call kronk_cli
-    jmp $
+    hlt
 
 .startVideo:
     call kronk_vid
-    jmp $
+    hlt
 
 
-; ------------------------------------------------------------------
+; ==================================================================
+; JUMP VECTORS
+; ==================================================================
+
+JUMP_VECTORS:
+    jmp kernel_start        ; 0x0066
+    jmp print               ; 0x0068
+    jmp cls                 ; 0x006B
+    jmp os_file_exists      ; 0x006E
+    jmp os_load_file        ; 0x0071
+    jmp os_create_file      ; 0x0074
+    jmp os_remove_file      ; 0x0077
+    jmp os_write_file       ; 0x007A
+    jmp string_lowercase    ; 0x007D
+    jmp string_uppercase    ; 0x0080
+    jmp string_truncate     ; 0x0083
+    jmp string_length       ; 0x0086
+    jmp move_cursor         ; 0x0089
+    jmp get_cursor_pos      ; 0x008C
+    jmp print_horiz_line    ; 0x008F
+    jmp input_dialog        ; 0x0092
+    jmp list_dialog         ; 0x0095
+    jmp dialog_box          ; 0x0098
+    jmp change_cursor       ; 0x009B
+    jmp string_clear        ; 0x009E
+    jmp os_get_file_list    ; 0x00A1
+    jmp clear_regs          ; 0x00A4
+    jmp int_to_string       ; 0x00A7
+
+
+; ==================================================================
 ; KERNEL SUBROUTINES
+; ==================================================================
+
     error_ext:
         pop si
 
@@ -136,71 +150,7 @@ RESET:
         xor dx, dx
         call dialog_box
 
-        mov bh, 0x9F
-        call cls
-
-        ret
-
-    execute_bas_program:
-        pop si
-        push si
-        
-        mov bx, si
-        mov ax, si
-        call string_length
-
-        mov si, bx
-        add si, ax
-
-        sub si, 3
-
-        mov di, bas_ext
-        mov cx, 3
-        rep cmpsb
-        jne error_ext
-
-        pop si
-        
-        mov ax, si
-        mov cx, 32768
-        call os_load_file
-
-        mov bh, 0x0F
-        call cls
-
-        mov ax, 32768
-        xor si, si
-        ;call os_run_basic
-
-        mov si, new_line
-        call print
-
-        mov bh, 0x9F
-        call cls
-
-        ret
-
-    execute_bin_program:
-        mov si, new_line
-        call print
-
-		xor ax, ax
-		xor bx, bx
-		xor cx, cx
-		xor dx, dx
-		xor si, si
-		xor di, di
-
-        call 32768
-        mov bh, 0x0F
-        call cls
-
-        mov si, prg_done_msg
-        call print
-        xor ah, ah
-        int 0x16
-        
-        mov bh, 0x0F
+        mov bh, cli_color
         call cls
 
         ret
@@ -235,7 +185,7 @@ RESET:
         pop si
 
         mov ax, si
-        mov cx, 32768
+        mov cx, prg_load_loc
         call os_load_file
 
         call execute_bin_program
@@ -254,10 +204,75 @@ RESET:
             xor dx, dx
             call dialog_box
 
-            mov bh, 0x9F
+            mov bh, cli_color
             call cls
 
             ret
+
+    execute_bas_program:
+        pop si
+        push si
+        
+        mov bx, si
+        mov ax, si
+        call string_length
+
+        mov si, bx
+        add si, ax
+
+        sub si, 3
+
+        mov di, bas_ext
+        mov cx, 3
+        rep cmpsb
+        jne error_ext
+
+        pop si
+        
+        mov ax, si
+        mov cx, prg_load_loc
+        call os_load_file
+
+        mov bh, 0x0F
+        call cls
+
+        mov ax, prg_load_loc
+        xor si, si
+        ;call os_run_basic
+
+        mov si, new_line
+        call print
+
+        mov bh, cli_color
+        call cls
+
+        ret
+
+    execute_bin_program:
+        mov si, new_line
+        call print
+
+		xor ax, ax
+		xor bx, bx
+		xor cx, cx
+		xor dx, dx
+		xor si, si
+		xor di, di
+
+        call prg_load_loc
+        mov bh, 0x0F
+        call cls
+
+        mov si, prg_done_msg
+        call print
+        xor ah, ah
+        int 0x16
+        
+        mov bh, 0x0F
+        call cls
+
+        ret
+
 
 ; ------------------------------------------------------------------
 ; STRINGS AND OTHER VARIABLES

@@ -1,31 +1,39 @@
 BITS 16
 ORG 32768
 
+color   equ 0x0F
+
 jmp start
 
     %include "kronkdev.inc"
 
 start:
-    mov bh, 0x9F
+    mov bh, color
     call cls
+    
+	mov ch, 0x06
+    call change_cursor
 
     mov ax, file_name
     call string_length
     mov di, file_name
     call string_clear
 
-	mov ch, 0x06
-    call change_cursor
-
     mov ax, file_name
     mov bx, new_file_msg
     call input_dialog
+    
+    push ax
+    mov ah, 0x0e
+    mov al, 'X'
+    int 0x10
+    pop ax
 
     mov si, file_name
     mov ax, 12
     call string_truncate
 
-    mov bh, 0x9F
+    mov bh, color
     call cls
 
     mov ax, new_color_list
@@ -591,7 +599,7 @@ start:
 	    mov ch, 0x00
         call change_cursor
 
-        mov bh, 0x9F
+        mov bh, color
         call cls
         ret
 

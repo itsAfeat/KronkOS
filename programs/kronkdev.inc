@@ -4,7 +4,7 @@
 ; ------------------------------------------------------------------
 ; IMPORTEN LOCATIONS
 
-    kernel_start            equ 0x0000
+    kernel_start            equ 0066h
 
 ; ------------------------------------------------------------------
 ; KEYS
@@ -35,24 +35,27 @@
     ; * PROGRAM SUBROUTINES *
     ; ***********************
 
-    print               equ 0002h
-    cls                 equ 0005h
-    os_file_exists      equ 0008h
-    os_load_file        equ 000Bh
-    os_create_file      equ 000Eh
-    os_remove_file      equ 0011h
-    os_write_file       equ 0014h
-    string_lowercase    equ 0017h
-    string_uppercase    equ 001Ah
-    string_truncate     equ 001Dh
-    string_length       equ 0020h
-    move_cursor         equ 0023h
-    get_cursor_pos      equ 0026h
-    print_horiz_line    equ 0029h
-    input_dialog        equ 002Ch
-    list_dialog         equ 002Fh
-    dialog_box          equ 0032h
-    change_cursor       equ 0035h
-    string_clear        equ 0038h
+    print               equ 0068h
+    cls                 equ 006Bh
+    os_file_exists      equ 006Eh
+    os_load_file        equ 0071h
+    os_create_file      equ 0074h
+    os_remove_file      equ 0077h
+    os_write_file       equ 007Ah
+    string_lowercase    equ 007Dh
+    string_uppercase    equ 0080h
+    string_truncate     equ 0083h
+    string_length       equ 0086h
+    move_cursor         equ 0089h
+    get_cursor_pos      equ 008Ch
+    print_horiz_line    equ 008Fh
+    input_dialog        equ 0092h
+    list_dialog         equ 0095h
+    dialog_box          equ 0098h
+    change_cursor       equ 009Bh
+    string_clear        equ 009Eh
+    os_get_file_list    equ 00A1h
+    clear_regs          equ 00A4h
+    int_to_string       equ 00A7h
 
 ; ------------------------------------------------------------------

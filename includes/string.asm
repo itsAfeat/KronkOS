@@ -904,11 +904,12 @@ string_tokenize:
 
 string_clear:
     pusha
-    mov bx, 1
+    mov bx, -1
     
     .loop:
         xor al, al
         stosb
+        
         inc bx
 
         cmp ax, bx

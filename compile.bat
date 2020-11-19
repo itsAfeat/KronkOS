@@ -76,7 +76,8 @@ if "%y%" == "1" (
         if "%x%" == "1" (
             wsl sh -c "export DISPLAY=0:0 && qemu-system-x86_64 -cdrom images/KronkISO.iso"
         ) else (
-            wsl sh -c "export DISPLAY=0:0 && qemu-system-x86_64 -fda images/KronkOS.img"
+            ::wsl sh -c "export DISPLAY=0:0 && qemu-system-x86_64 -fda images/KronkOS.img"
+            qemu-system-x86_64 -fda images/KronkOS.img
         )
     )
 )

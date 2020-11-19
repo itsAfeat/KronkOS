@@ -6,6 +6,19 @@ get_api_version:
 	ret
 
 ; ------------------------------------------------------------------
+; clear_regs -- Clear all the registers
+
+clear_regs:
+	xor ax, ax
+	xor bx, bx
+	xor cx, cx
+	xor dx, dx
+	xor si, si
+	xor di, di
+	
+	ret
+
+; ------------------------------------------------------------------
 ; fatal_error -- Display error message and halt execution
 ; IN: AX = error message string location
 

@@ -8,6 +8,27 @@ kronk_cli:
     mov bx, 0x0000
     int 0x10
 
+	; Let's see if there's a file called AUTORUN.BIN and execute
+	; it if so, before going to the terminal
+
+    mov ax, .autobin_filename
+    call os_file_exists
+    jc .no_autorun_bin
+
+    mov cx, prg_load_loc
+    call os_load_file
+    call execute_bin_program
+
+.no_autorun_bin:
+    mov ax, .autobas_filename
+    call os_file_exists
+    jc .no_autorun_bas
+
+    mov cx, prg_load_loc
+    call os_load_file
+    call execute_bas_program
+
+.no_autorun_bas:
     ; Draw welcome menu
     mov si, welcome_msg1
     call welcome_print
@@ -441,3 +462,5 @@ kronk_cli:
 .file_size_typ:		db " Bytes", 0x0a, 0x0d, 0
 .tmp_filerm:        db " has been deleted", 0
 .tmp_filemk:        db " has been created", 0
+.autobin_filename:  db "AUTORUN.BKF", 0
+.autobas_filename:  db "AUTORUN.BAS", 0

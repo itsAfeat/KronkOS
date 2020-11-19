@@ -55,7 +55,7 @@ Other:
         ✔ clear @done(20-11-11 13:31)
         ✔ dir @done(20-11-11 13:31)
         ☐ edit [filename]
-        ☐ load [filename]
+        ✔ load [filename] @done(20-11-19 04:48)
         ✔ mk [filename] @done(20-11-15 15:06)
         ✔ rm [filename] @done(20-11-15 15:06)
     
