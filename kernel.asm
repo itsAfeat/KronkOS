@@ -260,13 +260,6 @@ JUMP_VECTORS:
 		xor di, di
 
         call prg_load_loc
-        mov bh, 0x0F
-        call cls
-
-        mov si, prg_done_msg
-        call print
-        xor ah, ah
-        int 0x16
         
         mov bh, 0x0F
         call cls
@@ -331,7 +324,6 @@ JUMP_VECTORS:
     ; FILE RELATED VARIABLES START
 	kern_filename:		db 'KERNEL.BIN', 0
     settings_filename:  db 'SETTINGS.KSF', 0
-	prg_done_msg:	    db '>>> Program finished --- press a key to continue...', 0
 
 	bin_ext:			db 'BKF'
 	bas_ext:			db 'BAS'
