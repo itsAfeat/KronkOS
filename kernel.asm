@@ -320,7 +320,7 @@ JUMP_VECTORS:
 	welcome_msg1:		db 0x0a, 0x0d, " KronkOS ver. ", KRONKOS_VER
 						times 44-18 db " "
 						db 0x0a, 0x0d, " ", 0
-	welcome_msg2:		db " Kilo Bytes of total memory available. ", 0x0a, 0x0d, 0
+	welcome_msg2:		db " Bytes of total memory available.      ", 0x0a, 0x0d, 0
 	welcome_msg3:		times 45 db " "
 						db 0x0a, 0x0d, " Type 'help' and press enter to start off.   ", 0x0a, 0x0d, 0
 	; END
