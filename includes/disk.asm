@@ -1294,12 +1294,17 @@ chk_string_ext:
 	sub si, 4
 	mov al, [si]
 	cmp al, '.'
-	je .ext_found
+	jne .ext_not_found
 
 	pop si
 	pop ax
-	cmp ax, 8
-	jl .skip_trun
+	jmp .ext_found
+
+	.ext_not_found:
+		pop si
+		pop ax
+		cmp ax, 8
+		jl .skip_trun
 
 	mov ax, 8
 	call string_truncate
