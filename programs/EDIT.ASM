@@ -675,7 +675,7 @@ setup_screen:
 
     file_name:          times 13 db 0
     file_size:          dw 0
-    new_file_msg:       db "Enter name of file to create/load", 0
+    new_file_msg:       db "Enter name of file to create/load:", 0
 
     title_msg:          db "KronkOS Text Editor  -  ", 0
     footer_msg:         db "[Esc] Quit  [F1] Help  [F2] New  [F3] Save  [F5] Run BASIC", 0
