@@ -106,7 +106,7 @@ print_horiz_line:
 
 ; ------------------------------------------------------------------
 ; input_dialog -- Get text string from user via a dialog box
-; IN: AX = string location, BX = message to show
+; IN: AX = string location, BX = message to show, CX = max length
 ; OUT: AX = string location
 
 input_dialog:
@@ -114,7 +114,6 @@ input_dialog:
 
 	push ax
 	push bx
-
 
 	mov dh, 10
 	mov dl, 12
@@ -142,7 +141,6 @@ input_dialog:
 	mov dh, 11
 	call move_cursor
 
-
 	pop bx
 	mov si, bx
 	call print
@@ -151,9 +149,8 @@ input_dialog:
 	mov dh, 13
 	call move_cursor
 
-
 	pop ax
-	mov bx, 50
+	mov bx, cx
 	call input_string
 
 	popa

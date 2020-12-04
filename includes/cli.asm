@@ -378,7 +378,8 @@ kronk_cli:
     pusha
     mov ax, .tmp_filename
     call os_remove_file
-    
+    jc .not_file
+
     mov ax, 0x0e0a
     int 0x10
     mov al, 0x0d
@@ -388,12 +389,18 @@ kronk_cli:
     call print
     mov si, .tmp_filerm
     call print
+    jmp .finished
 
-    mov ax, 0x0e0a
-    int 0x10
-    int 0x10
-    mov al, 0x0d
-    int 0x10
+    .not_file:
+        mov si, .file_not_found
+        call print
+
+    .finished:
+        mov ax, 0x0e0a
+        int 0x10
+        int 0x10
+        mov al, 0x0d
+        int 0x10
 
     popa
 
@@ -464,3 +471,4 @@ kronk_cli:
 .tmp_filemk:        db " has been created", 0
 .autobin_filename:  db "AUTORUN.BKF", 0
 .autobas_filename:  db "AUTORUN.BAS", 0
+.file_not_found:    db 0x0a, 0x0d, "File not found", 0

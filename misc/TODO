@@ -59,6 +59,8 @@ Other:
         ✔ mk [filename] @done(20-11-15 15:06)
         ✔ rm [filename] @done(20-11-15 15:06)
     
+EDIT.ASM:
+    ✔ add file extension if user didn't enter it @done(20-12-04 09:29)
 
 ERRORS: @critical 
     ☐ Mouse be fuck all sensitiv

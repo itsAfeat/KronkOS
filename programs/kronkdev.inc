@@ -57,5 +57,9 @@
     os_get_file_list    equ 00A1h
     clear_regs          equ 00A4h
     int_to_string       equ 00A7h
+    chk_string_ext      equ 00AAh
+    string_join         equ 00ADh
+    string_add          equ 00B0h
+    string_copy         equ 00B3h
 
 ; ------------------------------------------------------------------

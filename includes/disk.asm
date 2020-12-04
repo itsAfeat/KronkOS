@@ -1274,6 +1274,51 @@ disk_reset_floppy:
 
 
 ; --------------------------------------------------------------------------
+; chk_string_ext -- Check if a file has a 3 letter extension, if not add it
+; IN: SI = String
+;     AX = Truncate length
+; OUT SI = String with extension
+
+chk_string_ext:
+	push ax
+	push bx
+
+	call string_truncate
+
+	push ax
+	push si
+	mov ax, si
+	call string_length
+	add si, ax
+
+	sub si, 4
+	mov al, [si]
+	cmp al, '.'
+	je .ext_found
+
+	pop si
+	pop ax
+	cmp ax, 8
+	jl .skip_trun
+
+	mov ax, 8
+	call string_truncate
+
+	.skip_trun:
+		mov ax, si
+		mov bx, .tmp_ext
+		call string_join
+		mov si, cx
+
+	.ext_found:
+		pop ax
+		pop bx
+		ret
+
+	.tmp_ext:	db ".txt", 0
+
+
+; --------------------------------------------------------------------------
 ; disk_convert_l2hts -- Calculate head, track and sector for int 13h
 ; IN: logical sector in AX; OUT: correct registers for int 13h
 

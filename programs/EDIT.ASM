@@ -21,17 +21,15 @@ start:
 
     mov ax, file_name
     mov bx, new_file_msg
+    mov cx, 13
     call input_dialog
-    
-    push ax
-    mov ah, 0x0e
-    mov al, 'X'
-    int 0x10
-    pop ax
 
     mov si, file_name
     mov ax, 12
-    call string_truncate
+    call chk_string_ext
+
+    mov di, file_name
+    call string_copy
 
     mov bh, color
     call cls
@@ -677,9 +675,7 @@ setup_screen:
 
     file_name:          times 13 db 0
     file_size:          dw 0
-    new_file_msg:       db "Enter name of file to create/load", 0x0a, 0x0d
-                        times 14 db " "
-                        db "(max: 8 chars without ext)", 0
+    new_file_msg:       db "Enter name of file to create/load", 0
 
     title_msg:          db "KronkOS Text Editor  -  ", 0
     footer_msg:         db "[Esc] Quit  [F1] Help  [F2] New  [F3] Save  [F5] Run BASIC", 0

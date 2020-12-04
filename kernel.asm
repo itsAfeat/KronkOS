@@ -135,6 +135,10 @@ JUMP_VECTORS:
     jmp os_get_file_list    ; 0x00A1
     jmp clear_regs          ; 0x00A4
     jmp int_to_string       ; 0x00A7
+    jmp chk_string_ext      ; 0x00AA
+    jmp string_join         ; 0x00AD
+    jmp string_add          ; 0x00B0
+    jmp string_copy         ; 0x00B3
 
 
 ; ==================================================================
