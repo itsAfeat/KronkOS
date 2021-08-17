@@ -139,6 +139,8 @@ JUMP_VECTORS:
     jmp string_join         ; 0x00AD
     jmp string_add          ; 0x00B0
     jmp string_copy         ; 0x00B3
+    jmp print_atr           ; 0x00B6
+    jmp input_string        ; 0x00B9
 
 
 ; ==================================================================
@@ -265,8 +267,9 @@ JUMP_VECTORS:
 
         call prg_load_loc
         
+        mov ax, 0
         mov bh, 0x0F
-        call cls
+        call switch_mode
 
         ret
 

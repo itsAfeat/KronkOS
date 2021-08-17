@@ -1,3 +1,7 @@
+; ------------------------------------------------------------------
+; cls -- Clear the screen with a self choosen color
+; IN: BH = Color to clear with
+
 cls:
     pusha
     

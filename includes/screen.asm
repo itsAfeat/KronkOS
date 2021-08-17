@@ -488,6 +488,7 @@ input_string:
 	stosb
 	mov ah, 0x0E			; Teletype Function
 	mov bh, 0			; Video Page 0
+	mov bl, 0x0f
 	push bp				; Some BIOS's may mess up BP
 	int 0x10
 	pop bp

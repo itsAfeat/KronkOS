@@ -61,5 +61,7 @@
     string_join         equ 00ADh
     string_add          equ 00B0h
     string_copy         equ 00B3h
+    print_atr           equ 00B6h
+    input_string        equ 00B9h
 
 ; ------------------------------------------------------------------

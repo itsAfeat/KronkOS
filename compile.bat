@@ -1,5 +1,6 @@
 @echo off
 
+cls
 echo Building KronkOS floppy image!
 echo.
 echo Assembling bootloader...
@@ -71,14 +72,12 @@ if errorlevel 2 set y=2
 
 if "%y%" == "1" (
     if "%1" == "-d" (
-        wsl sh -c "export DISPLAY=0:0 && qemu-system-x86_64 -s -S -fda images/KronkOS.img"
+        qemu-system-x86_64.exe -s -S -fda images/KronkOS.img
     ) else (
         if "%x%" == "1" (
-            wsl sh -c "export DISPLAY=0:0 && qemu-system-x86_64 -cdrom images/KronkISO.iso"
+            qemu-system-x86_64.exe -cdrom images/KronkISO.iso
         ) else (
-            ::qemu-system-x86_64 -fda images/KronkOS.img
-            wsl sh -c "export DISPLAY=0:0 && qemu-system-x86_64 -fda images/KronkOS.img"
+            qemu-system-x86_64.exe -fda images/KronkOS.img
         )
     )
 )
-cls

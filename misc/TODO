@@ -7,13 +7,13 @@ Kernel:
     ✔ Add kernel welcome screen (take the one from 0.2.x) @high @started(20-11-09 18:26) @done(20-11-09 18:38) @lasted(12m21s)
     ✔ Add a status bar with basic information to the screen like time and date @high @started(20-08-21 13:27) @done(20-08-21 14:12) @lasted(45m32s)
     ☐ Have the ability to use other ports, like usb and floppy @low
-    ☐ Port list_dialog to video mode @high 
+    ☐ Port list_dialog to video mode @high
     ✔ Add tmp help menu @low @started(20-11-09 18:48) @done(20-11-09 19:22) @lasted(34m28s)
     ☐ Add error message at failed restart @high
     ✔ Make all the chars that the user writes upper case (for style baby) @low @started(20-11-10 23:22) @done(20-11-11 00:03) @lasted(41m34s)
     ☐ Add the ability to run mk, rm, load and edit from the help menu @high 
     ✔ Make a fancy DIR output (like the one in 0.2.5) @done(20-11-15 15:07)
-    ☐ Create a basic user interface for the video mode @high 
+    ☐ Create a basic user interface for the video mode @high
     ✔ Add kronkdev.inc and add the EDIT program @done(20-11-16 12:20)
 
 Settings:
@@ -60,7 +60,13 @@ Other:
         ✔ rm [filename] @done(20-11-15 15:06)
     
 EDIT.ASM:
-    ✔ add file extension if user didn't enter it @done(20-12-04 09:29)
+    ✔ Add file extension if user didn't enter it @done(20-12-04 09:29)
+
+TICTAC.ASM:
+    ☐ Create the keyboard interface
+    ☐ Finish the user interface
+    ☐ Create the dialog_box function
+    ✔ Create the input_dialog function @done(21-04-28 19:20)
 
 ERRORS: @critical 
     ☐ Mouse be fuck all sensitiv

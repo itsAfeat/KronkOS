@@ -193,14 +193,13 @@ load_file_sector:
     mov  es, ax
     mov  bx, word [pointer]
 
-    pop  ax                             ; Save in case we (or some small brain int) lose it
+    pop  ax                             ; Save in case we (or some small brain int) loses it
     push ax
 
     stc
     int  0x13
 
     jnc  calc_next_cluster              ; If no stinky errors
-
     call reset_floppy                   ; UH OH Stinky error! Better retry
     jmp  load_file_sector
 

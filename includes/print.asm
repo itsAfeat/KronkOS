@@ -63,6 +63,8 @@ welcome_print:
 
 print_atr:
     pusha
+    mov [.start_x], dl
+
     mov cx, 1
     mov ah, 0x09
 
@@ -89,9 +91,57 @@ print_atr:
     mov ah, 0x0e
     int 0x10
     mov ah, 0x09
-
     jmp short .repeat
 
 .done:
     popa
     ret
+
+    .start_x:   dw 0
+
+; ------------------------------------------------------------------
+; print_word_hex -- Print a word as hex
+; IN: AX = Hex number
+;     BH = Page number
+;     BL = Attribute
+
+print_word_hex:
+    pusha
+    xchg al, ah
+    call print_byte_hex
+    xchg al, ah
+    call print_byte_hex
+    popa
+    ret
+
+; ------------------------------------------------------------------
+; print_byte_hex -- Print a byte as hex
+; IN: AX = Hex number
+
+print_byte_hex:
+    push ax
+    push cx
+    push bx
+
+    lea bx, [.table]
+
+    mov ah, al
+    and al, 0x0f
+    mov cl, 4
+    shr ah, cl
+    xlat
+    xchg ah, al
+    xlat
+
+    pop bx
+    mov ch, ah
+    mov ah, 0x0e
+    int 0x10
+    mov al, ch
+    int 0x10
+
+    pop cx
+    pop ax
+    ret
+
+    .table: db "0123456789ABCDEF", 0

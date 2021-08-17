@@ -10,35 +10,51 @@ kronk_vid:
 
     ; Initalize and enable the mouse if possible
     call mouse_initialize
-    jc vid_input
-    mov al, 1
-    mov [mouse_working], al
+    jc error
     call mouse_enable
     jmp vid_input
 
+error: 
+    mov bh, 0x00
+    call cls
+    jmp $
+
+
 vid_input:
-    ;mov si, mb_string
-    ;xor bh, bh
-    ;mov bl, vid_forecolor
-    ;call print_atr
+    mov bh, vid_backcolor
+    call cls
 
-    ;mov bh, vid_backcolor
-    ;call cls
+.at_same:
+    call mouse_loop
+    cmp dl, [lastX]
+    jne .moved
 
-    ;mov al, [mouse_working]
-    ;cmp al, 0
-    ;call mouse_loop
-    ;call move_cursor
+    cmp dh, [lastY]
+    jne .moved
 
-    ;mov si, sejt
-    ;xor bh, bh
-    ;mov bl, vid_forecolor
-    ;call print_atr
+    mov si, sejt
+    mov bx, 0x000F
+    call print_atr
 
-    hlt
+    jmp .at_same
+
+.moved:
+    mov [lastX], dl
+    mov [lastY], dh
+
+    mov si, sejt
+    mov bx, 0x000F
+    call print_atr
+
+    jmp vid_input
+
+    .separator: db ", ", 0
+    .lastPos:   dw 0
 
 ; ------------------------------------------------------------------
 ; STRINGS AND OTHER VARIABLES
 
+    lastX:              db 0
+    lastY:              db 0
     mouse_working:      db 0
-    sejt:               db " ", 0
+    sejt:               db "X", 0

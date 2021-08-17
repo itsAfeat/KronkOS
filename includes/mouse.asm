@@ -207,9 +207,10 @@ no_mouse:
 
 mouse_loop:
     call poll_mouse
+
     mov dl, [mouseX]
     mov dh, [mouseY]
-    
+
     call move_cursor
     call clamp_mouse
 
