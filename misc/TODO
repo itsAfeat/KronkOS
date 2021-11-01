@@ -37,10 +37,11 @@ Other:
     Misc:
         ✔ Make video mode work @done(20-05-26 22:49)
         ☐ Create a KronkOS version of Basic [Kronk-Basic?] @low 
-        ☐ Make a compiler for Kronk-Basic @low 
+        ☐ Make a compiler/interpreter for Kronk-Basic @low 
         ✔ Make compile batch file @started(20-04-23 21:29) @done(20-04-23 21:30) @lasted(1m3s)
         ✔ Create an iso version too @done(20-11-16 00:00)
         ☐ Draw the KronkOS logo when it's booting @low 
+        ☐ Make a program (windows/linux) to convert an image into a file that KronkOS can understand and display
     
     Mouse:
         ✔ Add mouse support @low @started(20-05-09 02:43) @done(20-05-13 21:55) @lasted(4d19h12m54s)
